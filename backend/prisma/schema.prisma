@@ -1,0 +1,16 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Athlete {
+  id        String   @id @default(uuid())
+  name      String
+  age       Int
+  weight    Float
+  category  String
+  createdAt DateTime @default(now())
+}
