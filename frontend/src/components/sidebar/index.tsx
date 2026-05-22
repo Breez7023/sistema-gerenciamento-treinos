@@ -5,11 +5,26 @@ import {
   FaCog,
   FaDumbbell,
   FaChevronLeft,
+  FaSignOutAlt,
 } from "react-icons/fa";
-
+import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 
 export function Sidebar() {
+  const navigate = useNavigate();
+
+  async function handleLogout() {
+    try {
+      await api.post("/auth/logout");
+
+      localStorage.removeItem("token");
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <aside className="w-[280px] h-screen bg-[#09090b] border-r border-[#18181b] fixed left-0 top-0 flex flex-col justify-between">
       {/* TOPO */}
@@ -38,7 +53,7 @@ export function Sidebar() {
         {/* MENU */}
         <nav className="p-4 flex flex-col gap-2">
           <NavLink
-            to="/"
+            to="/dashboard"
             className={({ isActive }) =>
               `
               flex items-center gap-4
@@ -130,15 +145,15 @@ export function Sidebar() {
 
       {/* FOOTER */}
       <div className="border-t border-[#18181b] p-5">
-        <div className="bg-[#121216] rounded-3xl p-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-violet-600 flex items-center justify-center font-bold text-white text-lg">
+        <div className="bg-[#121216] rounded-3xl p-4 border border-white/5 shadow-[0_18px_50px_rgba(0,0,0,0.35)]">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-600 flex items-center justify-center font-black text-white text-lg shadow-[0_0_20px_rgba(139,92,246,0.35)]">
                 D
               </div>
 
-              <div>
-                <h2 className="text-white font-semibold leading-none">
+              <div className="min-w-0">
+                <h2 className="text-white font-semibold leading-none truncate">
                   Daniel
                 </h2>
 
@@ -146,19 +161,30 @@ export function Sidebar() {
               </div>
             </div>
 
-            <button
-              className="
-          w-14 h-14
-          rounded-2xl
-          bg-[#1a1a1f]
-          hover:bg-violet-600
-          transition-all duration-300
-          flex items-center justify-center
-          text-zinc-400 hover:text-white
-        "
-            >
-              <FaCog size={20} />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleLogout}
+                className="h-12 px-4 rounded-2xl bg-[#1a1a1f] hover:bg-red-500/15 border border-white/5 hover:border-red-500/20 transition-all duration-300 flex items-center gap-2 text-zinc-300 hover:text-red-300"
+              >
+                <FaSignOutAlt size={16} />
+                <span className="text-sm font-medium">Sair</span>
+              </button>
+
+              <button
+                className="
+                  w-12 h-12
+                  rounded-2xl
+                  bg-[#1a1a1f]
+                  hover:bg-violet-600
+                  transition-all duration-300
+                  flex items-center justify-center
+                  text-zinc-400 hover:text-white
+                  border border-white/5
+                "
+              >
+                <FaCog size={18} />
+              </button>
+            </div>
           </div>
         </div>
       </div>

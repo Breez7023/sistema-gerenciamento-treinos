@@ -17,6 +17,13 @@ import { Response } from 'express';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  private readonly cookieOptions = {
+    httpOnly: true,
+    secure: false,
+    sameSite: 'lax' as const,
+    path: '/',
+  };
+
   @Post('register')
   register(@Body() body: RegisterDto) {
     return this.authService.register(body);
@@ -29,14 +36,20 @@ export class AuthController {
     const data = await this.authService.login(body);
 
     res.cookie('access_token', data.token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
+      ...this.cookieOptions,
       maxAge: 1000 * 60 * 60 * 24,
     });
 
     return {
       user: data.user,
+    };
+  }
+  @Post('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token', this.cookieOptions);
+
+    return {
+      message: 'Logout realizado com sucesso',
     };
   }
   @UseGuards(AuthGuard('jwt'))
