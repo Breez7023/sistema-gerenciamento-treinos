@@ -1,16 +1,26 @@
-import type { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
+
 import { Sidebar } from "../components/sidebar";
 
-interface Props {
-  children: ReactNode;
-}
-
-export function MainLayout({ children }: Props) {
+export function MainLayout(props: any) {
   return (
-    <div className="bg-[#09090b] min-h-screen text-white">
+    <div
+      style={{
+        display: "flex",
+        background: "#06060a",
+        minHeight: "100vh",
+      }}
+    >
       <Sidebar />
 
-      <main className="ml-[280px] p-10">{children}</main>
+      <main
+        style={{
+          flex: 1,
+          padding: "32px",
+        }}
+      >
+        <Outlet />
+      </main>
     </div>
   );
 }

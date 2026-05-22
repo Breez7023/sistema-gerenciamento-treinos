@@ -4,14 +4,16 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
-model Athlete {
-  id        String   @id @default(uuid())
-  name      String
-  age       Int
-  weight    Float
-  category  String
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+
+  sport    String?
+  category String?
+
   createdAt DateTime @default(now())
 }
